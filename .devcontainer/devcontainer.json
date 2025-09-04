@@ -1,12 +1,14 @@
 {
-    "name": "Template Development Container",
+    "name": "ETS - LOG121",
     "dockerFile": "Dockerfile",
     "customizations": {
         "settings": {
             "terminal.integrated.shell.linux": "/bin/bash"
         },
         "vscode": {
-            "extensions": ["esbenp.prettier-vscode"]
+            "extensions": [
+                "vscjava.vscode-java-pack"
+            ]
         }
     },
     "remoteUser": "vscode"
