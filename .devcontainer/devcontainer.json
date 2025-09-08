@@ -6,9 +6,7 @@
             "terminal.integrated.shell.linux": "/bin/bash"
         },
         "vscode": {
-            "extensions": [
-                "vscjava.vscode-java-pack"
-            ]
+            "extensions": ["vscjava.vscode-java-pack"]
         }
     },
     "remoteUser": "vscode"

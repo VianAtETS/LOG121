@@ -9,6 +9,7 @@ Ce diagramme illustre deux types de relations possibles entre deux classes en UM
 - **Définition** : Une relation forte et persistante.
   La classe **A** possède une référence directe vers la classe **B**.
 - **Traduction en code** (attribut d’instance) :
+
   ```java
   class ClasseB { }
 
@@ -23,9 +24,9 @@ Ce diagramme illustre deux types de relations possibles entre deux classes en UM
 
 ## 2. Dépendance (ligne pointillée)
 
-* **Définition** : Une relation temporaire.
+- **Définition** : Une relation temporaire.
   La classe **A** dépend de la classe **B**, mais seulement dans une méthode ou une opération ponctuelle.
-* **Traduction en code** (paramètre ou variable locale) :
+- **Traduction en code** (paramètre ou variable locale) :
 
   ```java
   class ClasseB { }
@@ -40,10 +41,10 @@ Ce diagramme illustre deux types de relations possibles entre deux classes en UM
 
 ## Résumé
 
-* **Association (———>)** : relation forte → se traduit souvent par un **attribut**.
-* **Dépendance (------>)** : relation faible → se traduit souvent par un **paramètre de méthode** ou une **variable locale**.
+- **Association (———>)** : relation forte → se traduit souvent par un **attribut**.
+- **Dépendance (------>)** : relation faible → se traduit souvent par un **paramètre de méthode** ou une **variable locale**.
 
 Exemple de la vie courante :
 
-* Une **Voiture** a un **Moteur** (association).
-* Une **Voiture** va à une **StationService** pour faire le plein (dépendance).
+- Une **Voiture** a un **Moteur** (association).
+- Une **Voiture** va à une **StationService** pour faire le plein (dépendance).
