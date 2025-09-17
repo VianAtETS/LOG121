@@ -1,4 +1,4 @@
-public class Controleur extends Observateur {
+public class Controleur implements Observateur {
     private boolean chauffageActif = false;
     private boolean climatisationActive = false;
     private boolean ventilationActive = false;
