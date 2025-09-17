@@ -16,6 +16,7 @@ public class Controleur extends Observateur {
         System.out.println("Contrôleur : nouvelle valeur détectée : " + ((Capteur) sujet).toString());
 
         if (sujet instanceof CapteurTemperature) {
+            derniereTemperature = ((CapteurTemperature) sujet).getValeur();
             gererTemperature();
         }
 
