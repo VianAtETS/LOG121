@@ -3,10 +3,6 @@ public class Controleur extends Observateur {
     private boolean climatisationActive = false;
     private boolean ventilationActive = false;
 
-    // Variables pour stocker les dernières valeurs des capteurs
-    private double derniereTemperature = 0.0;
-    private double dernierCO2 = 0.0;
-
     public Controleur() {
         // Constructeur par défaut - les sujets seront ajoutés via ajouterObservateur()
     }
@@ -16,49 +12,43 @@ public class Controleur extends Observateur {
         System.out.println("Contrôleur : nouvelle valeur détectée : " + ((Capteur) sujet).toString());
 
         if (sujet instanceof CapteurTemperature) {
-            derniereTemperature = ((CapteurTemperature) sujet).getValeur();
-            gererTemperature();
+            double temperature = ((CapteurTemperature) sujet).getValeur();
+
+            if (temperature < 22.0) {
+                if (!chauffageActif) {
+                    demarrerChauffage();
+                }
+                if (climatisationActive) {
+                    arreterClimatisation();
+                }
+            } else if (temperature > 22.0) {
+                if (!climatisationActive) {
+                    demarrerClimatisation();
+                }
+                if (chauffageActif) {
+                    arreterChauffage();
+                }
+            } else {
+                if (chauffageActif) {
+                    arreterChauffage();
+                }
+                if (climatisationActive) {
+                    arreterClimatisation();
+                }
+            }
         }
 
         if (sujet instanceof CapteurCO2) {
-            dernierCO2 = ((CapteurCO2) sujet).getValeur();
-            gererCO2();
-        }
-    }
+            double concentration = ((CapteurCO2) sujet).getValeur();
 
-    private void gererTemperature() {
-        if (derniereTemperature < 22.0) {
-            if (!chauffageActif) {
-                demarrerChauffage();
-            }
-            if (climatisationActive) {
-                arreterClimatisation();
-            }
-        } else if (derniereTemperature > 22.0) {
-            if (!climatisationActive) {
-                demarrerClimatisation();
-            }
-            if (chauffageActif) {
-                arreterChauffage();
-            }
-        } else {
-            if (chauffageActif) {
-                arreterChauffage();
-            }
-            if (climatisationActive) {
-                arreterClimatisation();
-            }
-        }
-    }
-
-    private void gererCO2() {
-        if (dernierCO2 > 1000.0) {
-            if (!ventilationActive) {
-                demarrerVentilation();
-            }
-        } else {
-            if (ventilationActive) {
-                arreterVentilation();
+            if (concentration > 1000.0) {
+                if (!ventilationActive) {
+                    demarrerVentilation();
+                }
+            } else {
+                if (ventilationActive) {
+                    arreterVentilation();
+                }
             }
         }
     }
