@@ -9,7 +9,6 @@ public class Simulation {
         capteurTemp.ajouterObservateur(controleur);
         capteurCO2.ajouterObservateur(controleur);
 
-        // Demander à l'utilisateur de saisir des valeurs pour les capteurs
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
