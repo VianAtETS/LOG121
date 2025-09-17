@@ -3,7 +3,6 @@ public class Controleur extends Observateur {
     private boolean climatisationActive = false;
     private boolean ventilationActive = false;
 
-    // Variables pour stocker les dernières valeurs des capteurs
     private double derniereTemperature = 0.0;
     private double dernierCO2 = 0.0;
 
@@ -15,7 +14,6 @@ public class Controleur extends Observateur {
     public void mettreAJour(Sujet sujet) {
         System.out.println("Contrôleur : nouvelle valeur détectée : " + ((Capteur) sujet).toString());
 
-        // Mettre à jour les valeurs stockées selon le type de capteur
         if (sujet instanceof CapteurTemperature) {
             derniereTemperature = ((CapteurTemperature) sujet).getValeur();
             gererTemperature();
