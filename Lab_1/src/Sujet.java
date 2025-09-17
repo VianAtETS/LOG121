@@ -18,7 +18,7 @@ public abstract class Sujet {
 
     public void notifierObservateurs() {
         for (Observateur observateur : observateurs) {
-            observateur.mettreAJour();
+            observateur.mettreAJour(this);
         }
     }
 }

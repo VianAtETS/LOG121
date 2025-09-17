@@ -1,13 +1,13 @@
 import java.util.Scanner;
 
-public class App {
+public class Simulation {
     public static void main(String[] args) throws Exception {
         CapteurTemperature capteurTemp = new CapteurTemperature();
         CapteurCO2 capteurCO2 = new CapteurCO2();
 
-        // Créer et ajouter un controleur aux capteurs
-        Controleur controleurTemp = new Controleur(capteurTemp);
-        Controleur controleurCO2 = new Controleur(capteurCO2);
+        Controleur controleur = new Controleur();
+        capteurTemp.ajouterObservateur(controleur);
+        capteurCO2.ajouterObservateur(controleur);
 
         // Demander à l'utilisateur de saisir des valeurs pour les capteurs
         Scanner scanner = new Scanner(System.in);
