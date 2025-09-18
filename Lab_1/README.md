@@ -30,7 +30,7 @@ Voici le diagramme UML qui illustre cette conception :
 
 ## 📂 Structure du projet
 
-```
+```bash
 ├── README.md               # Présentation du laboratoire
 └── src                     # Code source Java
     ├── Capteur.java
