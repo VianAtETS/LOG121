@@ -3,8 +3,6 @@ name: Lint
 
 permissions:
   contents: read
-  packages: read
-  statuses: write
 
 on:
   push:
@@ -14,8 +12,11 @@ on:
   pull_request: null
 
 jobs:
-  build:
-    name: Lint
+  fix-lint-issues:
+    name: Fix Lint Issues
+    permissions:
+      contents: write
+      statuses: write
     runs-on: ubuntu-latest
 
     steps:
@@ -33,9 +34,13 @@ jobs:
           # Disable problematic validators
           VALIDATE_DOCKERFILE_HADOLINT: false
           VALIDATE_GIT_COMMITLINT: false
+          VALIDATE_GOOGLE_JAVA_FORMAT: false
+          VALIDATE_JAVA: false
           # Enable fixers for PR events
-          FIX_JSON: ${{ github.event_name == 'pull_request' }}
-          FIX_MARKDOWN: ${{ github.event_name == 'pull_request' }}
+          FIX_JSON: true
+          FIX_JSON_PRETTIER: true
+          FIX_MARKDOWN: true
+          FIX_MARKDOWN_PRETTIER: true
           FIX_NATURAL_LANGUAGE: ${{ github.event_name == 'pull_request' }}
 
       - name: Commit and push fixes

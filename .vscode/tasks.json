@@ -8,6 +8,9 @@
             "problemMatcher": [],
             "presentation": {
                 "showReuseMessage": false
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
             }
         }
     ]
