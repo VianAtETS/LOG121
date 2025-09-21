@@ -1,10 +1,12 @@
 # Exercice UML – Notification automatique de la banque
 
 Une banque désire être avisée automatiquement lorsque le solde d’un compte atteint une condition critique :
+
 - **Solde négatif inférieur à -1000 $**
 - **Solde positif supérieur à 10'000 $**
 
 Les opérations possibles sur le compte sont :
+
 - `déposer`
 - `retirer`
 
@@ -96,9 +98,10 @@ compte.deposer(8000);
 
 ## Résumé
 
-* Le patron **Observateur** permet d’automatiser la **notification de la banque** lorsqu’un compte sort de ses limites.
-* Les classes principales sont :
+- Le patron **Observateur** permet d’automatiser la **notification de la banque** lorsqu’un compte sort de ses limites.
+- Les classes principales sont :
 
-  * **Sujet** (ici `CompteBancaire`),
-  * **Observateur** (ici `Banque`).
-* La banque est alertée **sans couplage direct fort** entre les classes, ce qui rend le système extensible.
+  - **Sujet** (ici `CompteBancaire`),
+  - **Observateur** (ici `Banque`).
+
+- La banque est alertée **sans couplage direct fort** entre les classes, ce qui rend le système extensible.
