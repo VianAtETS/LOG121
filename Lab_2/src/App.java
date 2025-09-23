@@ -9,18 +9,21 @@ public class App {
     public static void main(String[] args) {
         List<ComposantDessin> dessins = new ArrayList<>();
 
-        // "Dessin" avec une seule forme
+        // Dessin avec une seule forme
+        Dessin dessinSimple = new Dessin("Dessin1");
         Forme formeSeule = new Forme("etoile");
-        dessins.add(formeSeule);
+
+        dessins.add(dessinSimple);
+        dessinSimple.ajouter(formeSeule);
 
         // Dessin avec deux formes seulement
-        Dessin dessinSimple = new Dessin("DessinSimple");
+        Dessin dessinRelativementSimple = new Dessin("Dessin1");
         Carre carre = new Carre("Carre");
         Forme losange = new Forme("Losange");
 
-        dessins.add(dessinSimple);
-        dessinSimple.ajouter(carre);
-        dessinSimple.ajouter(losange);
+        dessins.add(dessinRelativementSimple);
+        dessinRelativementSimple.ajouter(carre);
+        dessinRelativementSimple.ajouter(losange);
 
         // Dessin avec trois niveaux
         Dessin dessinComplexe = new Dessin("Dessin1");
