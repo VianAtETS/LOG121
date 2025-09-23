@@ -1,10 +1,10 @@
 import patternes.composant.Forme;
 
-public class Carre extends Forme {
+public class Carre extends Rectangle {
     private Double cote = null;
 
     public Carre(String nom, Double cote) {
-        super(nom);
+        super(nom, cote, cote);
         this.cote = cote;
     }
 
