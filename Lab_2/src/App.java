@@ -2,16 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import patternes.composant.Carre;
-import patternes.composant.Cercle;
-import patternes.composant.Rectangle;
-import patternes.composant.Triangle;
-import patternes.composant.ComposantDessin;
-import patternes.composant.Dessin;
-import patternes.composant.Forme;
-import patternes.strategie.StrategieAffichage;
-import patternes.strategie.StrategieCheminComplet;
-import patternes.strategie.StrategieIndentation;
+import patternes.composant.*;
+import patternes.strategie.*;
 
 public class App {
     public static void main(String[] args) {
