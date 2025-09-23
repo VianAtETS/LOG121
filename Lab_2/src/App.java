@@ -2,6 +2,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import patternes.composant.Carre;
+import patternes.composant.Cercle;
+import patternes.composant.Rectangle;
+import patternes.composant.Triangle;
 import patternes.composant.ComposantDessin;
 import patternes.composant.Dessin;
 import patternes.composant.Forme;
@@ -15,15 +19,15 @@ public class App {
 
         // Dessin avec trois niveaux
         Dessin dessin1 = new Dessin("Dessin1");
-        Forme cercle1 = new Forme("Cercle1");
+        Cercle cercle1 = new Cercle("Cercle1");
         Dessin dessin2 = new Dessin("Dessin2");
         Dessin dessin3 = new Dessin("Dessin3");
-        Forme cercle2 = new Forme("Cercle2");
-        Forme cercle3 = new Forme("Cercle3");
+        Cercle cercle2 = new Cercle("Cercle2");
+        Cercle cercle3 = new Cercle("Cercle3");
         Dessin dessin4 = new Dessin("Dessin4");
-        Forme triangle1 = new Forme("Triangle1");
-        Forme triangle2 = new Forme("Triangle2");
-        Forme rectangle1 = new Forme("Rectangle1");
+        Triangle triangle1 = new Triangle("Triangle1");
+        Triangle triangle2 = new Triangle("Triangle2");
+        Rectangle rectangle1 = new Rectangle("Rectangle1");
 
         dessin3.ajouter(cercle2);
         dessin3.ajouter(cercle3);
@@ -37,7 +41,7 @@ public class App {
 
         // Dessin avec deux formes seulement
         Dessin dessinSimple = new Dessin("DessinSimple");
-        Forme carre = new Forme("Carre");
+        Carre carre = new Carre("Carre");
         Forme losange = new Forme("Losange");
         dessinSimple.ajouter(carre);
         dessinSimple.ajouter(losange);
