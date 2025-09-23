@@ -4,6 +4,10 @@ public class Triangle extends Forme {
     private Double base = null;
     private Double hauteur = null;
 
+    public Triangle(String nom) {
+        super(nom);
+    }
+
     public Triangle(String nom, Double base, Double hauteur) {
         super(nom);
         this.base = base;
