@@ -2,7 +2,7 @@ package patternes.composant;
 
 import patternes.strategie.StrategieAffichage;
 
-class Forme implements ComposantDessin {
+public class Forme implements ComposantDessin {
     private String nom;
 
     public Forme(String nom) {

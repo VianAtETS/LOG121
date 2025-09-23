@@ -3,7 +3,7 @@ package patternes.strategie;
 import patternes.composant.Dessin;
 import patternes.composant.Forme;
 
-class StrategieIndentation implements StrategieAffichage {
+public class StrategieIndentation implements StrategieAffichage {
     private int niveauMax;
 
     public StrategieIndentation(int niveauMax) {

@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import patternes.composant.ComposantDessin;
 import patternes.composant.Dessin;
 import patternes.composant.Forme;
 import patternes.strategie.StrategieAffichage;

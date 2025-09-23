@@ -4,7 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-class IterateurDessin implements Iterator<ComposantDessin> {
+import patternes.composant.ComposantDessin;
+
+public class IterateurDessin implements Iterator<ComposantDessin> {
     private List<ComposantDessin> elements;
     private int position;
 

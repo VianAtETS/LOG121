@@ -7,7 +7,7 @@ import java.util.List;
 import patternes.iterateur.IterateurDessin;
 import patternes.strategie.StrategieAffichage;
 
-class Dessin implements ComposantDessin {
+public class Dessin implements ComposantDessin {
     private String nom;
     private List<ComposantDessin> enfants;
 
