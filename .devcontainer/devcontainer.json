@@ -35,7 +35,10 @@
         "--security-opt",
         "seccomp=unconfined"
     ],
-    "postCreateCommand": "bash .devcontainer/setup.sh",
+    "postCreateCommand": {
+        "JavaFX": "bash .devcontainer/setup-javafx.sh",
+        "PlantUML": "bash .devcontainer/setup-plantuml.sh"
+    },
     "forwardPorts": [
         6080,
         5901
