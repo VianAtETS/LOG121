@@ -10,9 +10,9 @@ sudo apt-get install -y graphviz
 
 # Install additional dependencies for PlantUML
 sudo apt-get install -y \
-    default-jre \
-    wget \
-    curl
+	default-jre \
+	wget \
+	curl
 
 # Create PlantUML directory
 PLANTUML_DIR="/opt/plantuml"
@@ -29,7 +29,7 @@ sudo wget -O ${PLANTUML_DIR}/plantuml.jar "${PLANTUML_URL}"
 sudo chown -R vscode:vscode $PLANTUML_DIR
 
 # Create wrapper script for easy execution
-sudo tee /usr/local/bin/plantuml > /dev/null << 'EOF'
+sudo tee /usr/local/bin/plantuml >/dev/null <<'EOF'
 #!/bin/bash
 java -jar /opt/plantuml/plantuml.jar "$@"
 EOF
@@ -37,7 +37,7 @@ EOF
 sudo chmod +x /usr/local/bin/plantuml
 
 # Add PlantUML environment variables to bashrc
-cat >> ~/.bashrc << 'EOF'
+cat >>~/.bashrc <<'EOF'
 
 # PlantUML Environment Variables
 export PLANTUML_JAR=/opt/plantuml/plantuml.jar
@@ -54,13 +54,13 @@ source ~/.bashrc
 # Test PlantUML installation
 echo ""
 echo "Testing PlantUML installation..."
-if command -v plantuml &> /dev/null; then
-    plantuml -version
-    echo ""
-    echo "✓ PlantUML installation successful!"
+if command -v plantuml &>/dev/null; then
+	plantuml -version
+	echo ""
+	echo "✓ PlantUML installation successful!"
 else
-    echo "✗ PlantUML installation failed!"
-    exit 1
+	echo "✗ PlantUML installation failed!"
+	exit 1
 fi
 
 echo ""

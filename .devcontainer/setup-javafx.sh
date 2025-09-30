@@ -7,19 +7,19 @@ sudo apt-get update
 
 # Install essential packages for JavaFX and GUI applications
 sudo apt-get install -y \
-    graphviz \
-    libgl1-mesa-glx \
-    libgtk-3-0 \
-    libxtst6 \
-    libxrender1 \
-    libxi6 \
-    libxrandr2 \
-    libxcursor1 \
-    libxinerama1 \
-    libxss1 \
-    libasound2-dev \
-    x11-apps \
-    xvfb
+	graphviz \
+	libgl1-mesa-glx \
+	libgtk-3-0 \
+	libxtst6 \
+	libxrender1 \
+	libxi6 \
+	libxrandr2 \
+	libxcursor1 \
+	libxinerama1 \
+	libxss1 \
+	libasound2-dev \
+	x11-apps \
+	xvfb
 
 # Download and install JavaFX SDK
 JAVAFX_VERSION="21.0.2"
@@ -42,7 +42,7 @@ sudo chown -R vscode:vscode /opt/javafx
 rm javafx-sdk.zip
 
 # Create environment variables file
-cat >> ~/.bashrc << 'EOF'
+cat >>~/.bashrc <<'EOF'
 
 # JavaFX Environment Variables
 export JAVAFX_HOME=/opt/javafx
