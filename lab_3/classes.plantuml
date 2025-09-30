@@ -1,106 +1,14 @@
 @startuml FormulairePaiement
 ' skinparam classAttributeIconSize 0
-' left to right direction
-' skinparam linetype ortho
+left to right direction
+skinparam linetype ortho
 skinparam defaultFontSize 14
 skinparam classFontSize 16
 skinparam noteFontSize 12
 
 title Laboratoire #3 - Formulaire de Paiement - Diagramme de Classes
 
-' Classe principale - Patron Médiateur
-class MediateurFormulaire {
-    - composantModePaiement: ComboBox<ModePaiement>
-    - composantCarteCredit: VBox
-    - composantCarteCadeau: VBox
-    - composantOptionsLivraison: ComboBox<OptionLivraison>
-    - composantAdresseLivraison: TextField
-    - composantAdresseFacturation: TextField
-    - composantMemeAdresse: CheckBox
-    - strategiePaiement: StrategiePaiement
-    + MediateurFormulaire()
-    + initialiser()
-    + notifierChangementModePaiement(mode: ModePaiement)
-    + notifierMemeAdresse(active: boolean)
-    + notifierChangementAdresseLivraison(adresse: String)
-    - mettreAJourVisibilite(mode: ModePaiement)
-    - mettreAJourOptionsLivraison(mode: ModePaiement)
-    - synchroniserAdresses()
-}
-
-' Patron Strategy pour les modes de paiement
-interface StrategiePaiement {
-    + valider(): boolean
-    + obtenirDonneesPaiement(): Map<String, String>
-}
-
-class StrategiePaiementCarteCredit implements StrategiePaiement {
-    - carte: CarteCredit
-    + StrategiePaiementCarteCredit(carte: CarteCredit)
-    + valider(): boolean
-    + obtenirDonneesPaiement(): Map<String, String>
-    - validerNumero(): boolean
-    - validerDateExpiration(): boolean
-    - validerCodeSecurite(): boolean
-}
-
-class StrategiePaiementCarteCadeau implements StrategiePaiement {
-    - carte: CarteCadeau
-    + StrategiePaiementCarteCadeau(carte: CarteCadeau)
-    + valider(): boolean
-    + obtenirDonneesPaiement(): Map<String, String>
-    - validerNumero(): boolean
-}
-
-class StrategiePaiementLivraison implements StrategiePaiement {
-    + StrategiePaiementLivraison()
-    + valider(): boolean
-    + obtenirDonneesPaiement(): Map<String, String>
-}
-
-' Hiérarchie des Cartes
-abstract class Carte {
-    # numero: String
-    + Carte()
-    + definirNumero(numero: String)
-    + obtenirNumero(): String
-    + {abstract} validerNumero(): boolean
-}
-
-class CarteCredit extends Carte {
-    - dateExpiration: String
-    - codeSecurite: String
-    + CarteCredit()
-    + definirDateExpiration(date: String)
-    + obtenirDateExpiration(): String
-    + definirCodeSecurite(code: String)
-    + obtenirCodeSecurite(): String
-    + validerNumero(): boolean
-    + validerDateExpiration(): boolean
-    + validerCodeSecurite(): boolean
-}
-
-class CarteCadeau extends Carte {
-    + CarteCadeau()
-    + validerNumero(): boolean
-}
-
-' Patron Value Object pour l'adresse
-class Adresse <<value object>> {
-    - rue: String
-    - ville: String
-    - codePostal: String
-    - pays: String
-    + Adresse(rue: String, ville: String, codePostal: String, pays: String)
-    + obtenirRue(): String
-    + obtenirVille(): String
-    + obtenirCodePostal(): String
-    + obtenirPays(): String
-    + versChaine(): String
-    + equals(autre: Adresse): boolean
-}
-
-' Énumérations
+' Enums
 enum ModePaiement {
     CARTE_CREDIT
     CARTE_CADEAU
@@ -113,79 +21,195 @@ enum OptionLivraison {
     LAISSER_PORTE
 }
 
-' Relations Patron Strategy
-MediateurFormulaire --> StrategiePaiement
-StrategiePaiementCarteCredit --> CarteCredit
-StrategiePaiementCarteCadeau --> CarteCadeau
+' Classes métier
+abstract class Carte {
+    - numero: String
+    + Carte(numero: String)
+    + valider(): boolean
+    # validerNumero(): boolean
+}
 
-' Relations Value Object
-MediateurFormulaire ..> Adresse : utilise
+class CarteCredit extends Carte {
+    - dateExpiration: String
+    - cvv: String
+    + CarteCredit(numero: String, dateExpiration: String, cvv: String)
+    + valider(): boolean
+    - validerDateExpiration(): boolean
+    - validerCVV(): boolean
+}
 
-' Relations Énumérations
-MediateurFormulaire --> ModePaiement
-MediateurFormulaire --> OptionLivraison
+class CarteCadeau extends Carte {
+    + CarteCadeau(numero: String)
+    + valider(): boolean
+}
 
-note right of MediateurFormulaire
-  <b>Utilise les composants JavaFX:</b>
-  - ComboBox<T>
-  - TextField
-  - CheckBox
-  - VBox
-  Ces classes n'ont pas besoin
-  d'être détaillées dans l'UML
-end note
+class Adresse {
+    - rue: String
+    - ville: String
+    - codePostal: String
+    - pays: String
+    - region: String
+    + Adresse(rue: String, ville: String, codePostal: String, pays: String)
+    + Adresse(rue: String, ville: String, codePostal: String, pays: String, region: String)
+    + valider(): boolean
+    + toString(): String
+    + equals(autre: Adresse): boolean
+}
 
-note left of MediateurFormulaire
-  <b>Responsabilités du Médiateur:</b>
+class FormulairePaiement {
+    - modePaiement: ModePaiement
+    - carteCredit: CarteCredit
+    - carteCadeau: CarteCadeau
+    - adresseLivraison: Adresse
+    - adresseFacturation: Adresse
+    - memeAdresse: boolean
+    - optionLivraison: OptionLivraison
+    + validerFormulaire(): boolean
+    + getModePaiement(): ModePaiement
+    + setModePaiement(methode: ModePaiement): void
+    + getCarteCredit(): CarteCredit
+    + setCarteCredit(carte: CarteCredit): void
+    + getCarteCadeau(): CarteCadeau
+    + setCarteCadeau(carte: CarteCadeau): void
+    + getAdresseLivraison(): Adresse
+    + setAdresseLivraison(adresse: Adresse): void
+    + getAdresseFacturation(): Adresse
+    + setAdresseFacturation(adresse: Adresse): void
+    + isMemeAdresse(): boolean
+    + setMemeAdresse(meme: boolean): void
+    + getOptionLivraison(): OptionLivraison
+    + setOptionLivraison(option: OptionLivraison): void
+}
 
-  1. <b>Gestion de la visibilité:</b>
-     Affiche/masque les champs selon
-     le mode de paiement sélectionné
+' Interface Composant simplifiée
+interface Composant {
+    + setMediateur(mediateur: Mediateur): void
+    + getNom(): String
+}
 
-  2. <b>Gestion des options de livraison:</b>
-     Désactive "LAISSER_PORTE" si
-     mode = PAIEMENT_LIVRAISON
+' Interface Mediateur
+interface Mediateur {
+    + ajouterComposant(composant: Composant): void
+    + notifier(emetteur: Composant, evenement: String): void
+}
 
-  3. <b>Synchronisation des adresses:</b>
-     Copie automatiquement l'adresse
-     de livraison vers facturation si
-     l'option est cochée
+' Classe concrète du Médiateur
+class MediateurFormulairePaiement {
+    - modePaiementCombo: ComboBox
+    - champCarteCredit: TextField[]
+    - champCarteCadeau: TextField
+    - champAdresseLivraison: TextField
+    - champAdresseFacturation: TextField
+    - caseAcocherMemeAdresse: CheckBox
+    - optionLivraisonCombo: ComboBox
+    - formulairePaiement: FormulairePaiement
 
-  4. <b>Coordination des stratégies:</b>
-     Instancie et utilise la bonne
-     stratégie selon le mode choisi
-end note
+    + ajouterComposant(composant: Composant): void
+    + notifier(emetteur: Composant, evenement: String): void
+    + getFormulairePaiement(): FormulairePaiement
+    - gererChangementModePaiement(): void
+    - gererChangementMemeAdresse(): void
+    - gererChangementAdresseLivraison(): void
+    - mettreAJourVisibiliteChamps(methode: ModePaiement): void
+    - mettreAJourOptionsLivraison(methode: ModePaiement): void
+    - mettreAJourDonneesFormulaire(): void
+    - validerEtAfficherErreurs(): void
+}
 
-note right of StrategiePaiement
-  <b>Patron Strategy:</b>
-  Encapsule les algorithmes de validation
-  selon le mode de paiement.
+' Composants JavaFX simplifiés
+class ComboBox {
+    - mediateur: Mediateur
+    - nom: String
+    + setMediateur(mediateur: Mediateur): void
+    + getNom(): String
+    + getValue(): Object
+}
 
-  Facilite l'ajout de nouveaux modes
-  sans modifier le médiateur.
-end note
+class TextField {
+    - mediateur: Mediateur
+    - nom: String
+    + setMediateur(mediateur: Mediateur): void
+    + getNom(): String
+    + getText(): String
+    + setText(texte: String): void
+    + setVisible(visible: boolean): void
+    + setDisable(desactive: boolean): void
+}
 
-note top of Adresse
-  <b>Value Object immuable:</b>
-  L'égalité basée sur les valeurs.
-  Utilisé pour livraison et facturation.
-end note
+class CheckBox {
+    - mediateur: Mediateur
+    - nom: String
+    + setMediateur(mediateur: Mediateur): void
+    + getNom(): String
+    + isSelected(): boolean
+}
 
-note bottom of Carte
-  <b>Validation polymorphique:</b>
-  Chaque type définit ses règles:
-  - CarteCredit: numéro, date, CVV
-  - CarteCadeau: numéro uniquement
+' Relations
+Mediateur <|.. MediateurFormulairePaiement
+Composant <|.. ComboBox
+Composant <|.. TextField
+Composant <|.. CheckBox
+
+MediateurFormulairePaiement o-- "1" ComboBox : modePaiementCombo
+MediateurFormulairePaiement o-- "3" TextField : champCarteCredit
+MediateurFormulairePaiement o-- "1" TextField : champCarteCadeau
+MediateurFormulairePaiement o-- "1" TextField : champAdresseLivraison
+MediateurFormulairePaiement o-- "1" TextField : champAdresseFacturation
+MediateurFormulairePaiement o-- "1" CheckBox : caseAcocherMemeAdresse
+MediateurFormulairePaiement o-- "1" ComboBox : optionLivraisonCombo
+
+ComboBox --> Mediateur : notifier
+TextField --> Mediateur : notifier
+CheckBox --> Mediateur : notifier
+
+MediateurFormulairePaiement ..> ModePaiement : utilise
+MediateurFormulairePaiement ..> OptionLivraison : utilise
+
+MediateurFormulairePaiement o-- "1" FormulairePaiement : gère
+
+FormulairePaiement *-- "0..1" CarteCredit
+FormulairePaiement *-- "0..1" CarteCadeau
+FormulairePaiement *-- "1" Adresse : adresseLivraison
+FormulairePaiement *-- "1" Adresse : adresseFacturation
+FormulairePaiement --> ModePaiement
+FormulairePaiement --> OptionLivraison
+
+note top of MediateurFormulairePaiement
+    Le médiateur gère toute la logique
+    d'interaction via la méthode notifier().
+
+    Événements possibles:
+    - "MOYEN_PAIEMENT_CHANGE"
+    - "MEME_ADRESSE_CHANGE"
+    - "ADRESSE_LIVRAISON_CHANGE"
 end note
 
 note bottom of ModePaiement
-  <b>Impacts sur l'interface:</b>
+    Énumération pour les
+    3 modes de paiement
+end note
 
-  CARTE_CREDIT => Champs carte de crédit visibles
-  CARTE_CADEAU => Champs carte cadeau visibles
-  PAIEMENT_LIVRAISON:
-    => Tous champs masqués
-    => LAISSER_PORTE désactivé
+note top of CarteCredit
+    Contient la logique de validation
+    pour les numéros de carte, date
+    d'expiration et CVV
+end note
+
+note bottom of CarteCadeau
+    Contient la logique de validation
+    pour les numéros de carte cadeau
+end note
+
+note left of FormulairePaiement
+    Modèle de données central qui
+    contient toutes les informations
+    du formulaire. Le médiateur
+    synchronise l'UI avec ce modèle.
+end note
+
+note bottom of OptionLivraison
+    Énumération pour les
+    3 options de livraison
 end note
 
 @enduml
