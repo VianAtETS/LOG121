@@ -1,0 +1,98 @@
+@startuml FormulairePaiement
+' skinparam classAttributeIconSize 0
+' left to right direction
+' skinparam linetype ortho
+skinparam defaultFontSize 14
+skinparam classFontSize 16
+skinparam noteFontSize 12
+
+title Laboratoire #2 - Représentation de Dessins - Diagramme de Classes
+
+interface ComposantDessin {
+    + afficher(strategie: StrategieAffichage, chemin: String, niveau: integer)
+}
+
+' Classes métier
+class App {
+    - dessins: List<ComposantDessin>
+    + main(args: String[])
+}
+
+class Forme implements ComposantDessin {
+    - nom: String
+    + Forme(nom: String)
+    + afficher()
+    + getNom(): String
+}
+
+class Rectangle extends Forme {
+    - longueur: float
+    - largeur: float
+    + Rectangle(nom: String, longueur: float, largeur: float)
+    + getLongueur(): float
+    + getLargeur(): float
+}
+
+class Cercle extends Forme {
+    - rayon: float
+    + Cercle(nom: String, rayon: float)
+    + getRayon(): float
+}
+
+class Triangle extends Forme {
+    - coteA: float
+    - coteB: float
+    - coteC: float
+    + Triangle(nom: String, coteA: float, coteB: float, coteC: float)
+    + getCoteA(): float
+    + getCoteB(): float
+    + getCoteC(): float
+}
+
+class Carre extends Rectangle {
+    + Carre(nom: String, cote: float)
+}
+
+class Dessin {
+    - nom: String
+    - enfants: List<ComposantDessin>
+    + Dessin(nom: String)
+    + ajouter(composant: ComposantDessin)
+    + supprimer(composant: ComposantDessin)
+    + afficher()
+    + getNom(): String
+    + getEnfants(): List<ComposantDessin>
+    + iterator(): IterateurDessin
+}
+
+class IterateurDessin {
+    - elements: List<ComposantDessin>
+    - position: integer
+    + IterateurDessin(elements: List<ComposantDessin>)
+    + hasNext(): boolean
+    + next(): ComposantDessin
+}
+
+interface StrategieAffichage {
+    + afficherDessin(forme: Forme, chemin: String, niveau: integer)
+}
+
+class StrategieIndentation implements StrategieAffichage {
+    - profondeurIndentation: integer
+    + StrategieIndentation(profondeurIndentation: integer)
+    + afficherDessin(forme: Forme, chemin: String, niveau: integer)
+    + genererIndentation(niveau: integer): String
+}
+
+class StrategieCheminComplet implements StrategieAffichage {
+    + afficherDessin(forme: Forme, chemin: String, niveau: integer)
+}
+
+' Relations
+App o.. "*" Dessin : utilise >
+App o.. "*" StrategieAffichage : utilise >
+
+Dessin "1" o-- "*" ComposantDessin : contient >
+Dessin <|.. IterateurDessin
+
+@enduml
