@@ -31,11 +31,11 @@ abstract class Carte {
 
 class CarteCredit extends Carte {
     - dateExpiration: String
-    - cvv: String
-    + CarteCredit(numero: String, dateExpiration: String, cvv: String)
+    - codeSecurite: String
+    + CarteCredit(numero: String, dateExpiration: String, codeSecurite: String)
     + valider(): boolean
     - validerDateExpiration(): boolean
-    - validerCVV(): boolean
+    - validerCodeSecurite(): boolean
 }
 
 class CarteCadeau extends Carte {
@@ -100,7 +100,7 @@ class MediateurFormulairePaiement {
     - champCarteCadeau: TextField
     - champAdresseLivraison: TextField
     - champAdresseFacturation: TextField
-    - caseAcocherMemeAdresse: CheckBox
+    - caseACocherMemeAdresse: CheckBox
     - optionLivraisonCombo: ComboBox
     - formulairePaiement: FormulairePaiement
 
@@ -111,9 +111,9 @@ class MediateurFormulairePaiement {
     - gererChangementMemeAdresse(): void
     - gererChangementAdresseLivraison(): void
     - mettreAJourVisibiliteChamps(methode: ModePaiement): void
-    - mettreAJourOptionsLivraison(methode: ModePaiement): void
+    - mettreAJourOptionsLivraison(optionLivraison: OptionLivraison): void
     - mettreAJourDonneesFormulaire(): void
-    - validerEtAfficherErreurs(): void
+    - validerFormulaire(): void
 }
 
 ' Composants JavaFX simplifiés
@@ -155,7 +155,7 @@ MediateurFormulairePaiement o-- "3" TextField : champCarteCredit
 MediateurFormulairePaiement o-- "1" TextField : champCarteCadeau
 MediateurFormulairePaiement o-- "1" TextField : champAdresseLivraison
 MediateurFormulairePaiement o-- "1" TextField : champAdresseFacturation
-MediateurFormulairePaiement o-- "1" CheckBox : caseAcocherMemeAdresse
+MediateurFormulairePaiement o-- "1" CheckBox : caseACocherMemeAdresse
 MediateurFormulairePaiement o-- "1" ComboBox : optionLivraisonCombo
 
 ComboBox --> Mediateur : notifier
