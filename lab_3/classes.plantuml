@@ -116,32 +116,12 @@ class MediateurFormulairePaiement {
     - validerFormulaire(): void
 }
 
+
 ' Composants JavaFX simplifiés
-class ComboBox {
-    - mediateur: Mediateur
-    - nom: String
-    + setMediateur(mediateur: Mediateur): void
-    + getNom(): String
-    + getValue(): Object
-}
-
-class TextField {
-    - mediateur: Mediateur
-    - nom: String
-    + setMediateur(mediateur: Mediateur): void
-    + getNom(): String
-    + getText(): String
-    + setText(texte: String): void
-    + setVisible(visible: boolean): void
-    + setDisable(desactive: boolean): void
-}
-
-class CheckBox {
-    - mediateur: Mediateur
-    - nom: String
-    + setMediateur(mediateur: Mediateur): void
-    + getNom(): String
-    + isSelected(): boolean
+package "Composants UI" <<Folder>> {
+    class ComboBox {}
+    class TextField {}
+    class CheckBox {}
 }
 
 ' Relations
@@ -157,10 +137,6 @@ MediateurFormulairePaiement o-- "1" TextField : champAdresseLivraison
 MediateurFormulairePaiement o-- "1" TextField : champAdresseFacturation
 MediateurFormulairePaiement o-- "1" CheckBox : caseACocherMemeAdresse
 MediateurFormulairePaiement o-- "1" ComboBox : optionLivraisonCombo
-
-ComboBox --> Mediateur : notifier
-TextField --> Mediateur : notifier
-CheckBox --> Mediateur : notifier
 
 MediateurFormulairePaiement ..> ModePaiement : utilise
 MediateurFormulairePaiement ..> OptionLivraison : utilise
