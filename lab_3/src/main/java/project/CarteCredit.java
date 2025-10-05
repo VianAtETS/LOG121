@@ -55,6 +55,6 @@ public class CarteCredit extends Carte {
     }
 
     private boolean validerCodeSecurite() {
-        return codeSecurite != null && codeSecurite.matches("\\d{3}");
+        return codeSecurite != null && codeSecurite.matches("\\d{3,4}");
     }
 }

@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 
-public class ControlleurFormulairePaiement {
+public class ControleurFormulairePaiement {
 
     @FXML
     private ComboBox<String> modePaiementCombo;
