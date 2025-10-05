@@ -68,16 +68,15 @@ public class MediateurFormulairePaiement implements Mediateur {
         composant.setMediateur(this);
     }
 
-    @Override
-    public void notifier(Composant emetteur, String evenement) {
+    public void notifier(Events evenement) {
         switch (evenement) {
-            case "MOYEN_PAIEMENT_CHANGE":
+            case MOYEN_PAIEMENT_CHANGE:
                 gererChangementModePaiement();
                 break;
-            case "MEME_ADRESSE_CHANGE":
+            case MEME_ADRESSE_CHANGE:
                 gererChangementMemeAdresse();
                 break;
-            case "ADRESSE_LIVRAISON_CHANGE":
+            case ADRESSE_LIVRAISON_CHANGE:
                 gererChangementAdresseLivraison();
                 break;
             default:
