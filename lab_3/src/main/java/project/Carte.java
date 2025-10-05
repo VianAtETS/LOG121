@@ -1,7 +1,7 @@
 package project;
 
 public abstract class Carte {
-    private String numero;
+    protected String numero;
 
     public Carte(String numero) {
         this.numero = numero;
