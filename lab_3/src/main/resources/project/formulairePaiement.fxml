@@ -67,11 +67,13 @@
     </HBox>
 
     <!-- Case à cocher même adresse -->
-    <HBox spacing="10.0" alignment="CENTER_LEFT">
-        <Label text="" minWidth="180" />
-        <CheckBox fx:id="memeAdresseCheckBox"
-                  text="Même adresse pour la facturation." />
+    <HBox spacing="10.0" alignment="CENTER">
+    <CheckBox fx:id="memeAdresseCheckBox"
+              text="L'adresse de facturation est la même que l'adresse de livraison."
+              wrapText="true"
+              maxWidth="500" />
     </HBox>
+
 
     <!-- Adresse de facturation -->
     <HBox spacing="10.0" alignment="CENTER_LEFT">
