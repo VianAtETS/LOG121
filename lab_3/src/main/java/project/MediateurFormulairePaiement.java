@@ -70,7 +70,7 @@ public class MediateurFormulairePaiement implements Mediateur {
 
     public void notifier(Events evenement) {
         switch (evenement) {
-            case MOYEN_PAIEMENT_CHANGE:
+            case MODE_PAIEMENT_CHANGE:
                 gererChangementModePaiement();
                 break;
             case MEME_ADRESSE_CHANGE:
@@ -96,7 +96,7 @@ public class MediateurFormulairePaiement implements Mediateur {
         }
 
         switch (modePaiement) {
-            case "Carte de crédit":
+            case "Carte de crédit": // J'aimerais éviter les strings magiques ici
                 // Afficher les champs de carte de crédit
                 carteCreditBox.setVisible(true);
                 carteCreditBox.setManaged(true);
@@ -115,7 +115,7 @@ public class MediateurFormulairePaiement implements Mediateur {
                 formulairePaiement.setModePaiement(ModePaiement.CARTE_CREDIT);
                 break;
 
-            case "Carte cadeau":
+            case "Carte cadeau": // J'aimerais éviter les strings magiques ici
                 // Masquer les champs de carte de crédit
                 carteCreditBox.setVisible(false);
                 carteCreditBox.setManaged(false);
@@ -134,7 +134,7 @@ public class MediateurFormulairePaiement implements Mediateur {
                 formulairePaiement.setModePaiement(ModePaiement.CARTE_CADEAU);
                 break;
 
-            case "Paiement à la livraison":
+            case "Paiement à la livraison": // J'aimerais éviter les strings magiques ici
                 // Masquer tous les champs de carte
                 carteCreditBox.setVisible(false);
                 carteCreditBox.setManaged(false);

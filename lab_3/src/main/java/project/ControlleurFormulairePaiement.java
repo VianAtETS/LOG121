@@ -63,7 +63,7 @@ public class ControlleurFormulairePaiement {
 
         // Configurer les listeners
         modePaiementCombo.setOnAction(event -> {
-            mediateur.notifier(Events.MOYEN_PAIEMENT_CHANGE);
+            mediateur.notifier(Events.MODE_PAIEMENT_CHANGE);
         });
 
         memeAdresseCheckBox.setOnAction(event -> {
@@ -83,6 +83,6 @@ public class ControlleurFormulairePaiement {
 
         // Sélectionner le premier mode de paiement par défaut
         modePaiementCombo.getSelectionModel().selectFirst();
-        mediateur.notifier(Events.MOYEN_PAIEMENT_CHANGE);
+        mediateur.notifier(Events.MODE_PAIEMENT_CHANGE);
     }
 }

@@ -155,7 +155,7 @@ note top of MediateurFormulairePaiement
     d'interaction via la méthode notifier().
 
     Événements possibles:
-    - "MOYEN_PAIEMENT_CHANGE"
+    - "MODE_PAIEMENT_CHANGE"
     - "MEME_ADRESSE_CHANGE"
     - "ADRESSE_LIVRAISON_CHANGE"
 end note

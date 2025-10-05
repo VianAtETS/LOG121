@@ -10,7 +10,7 @@ public enum Events {
      * Événement déclenché lorsque le mode de paiement change (Carte de crédit, Carte cadeau,
      * Paiement à la livraison)
      */
-    MOYEN_PAIEMENT_CHANGE,
+    MODE_PAIEMENT_CHANGE,
 
     /**
      * Événement déclenché lorsque l'adresse de livraison est modifiée
