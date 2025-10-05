@@ -27,7 +27,7 @@ hs_err_pid*
 replay_pid*
 
 # JavaFX
-*.lst
+target
 
 # Super-linter outputs
 super-linter-output
