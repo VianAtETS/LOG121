@@ -14,7 +14,7 @@ public class CarteCredit extends Carte {
 
     @Override
     public boolean valider() {
-        return super.valider() && validerDateExpiration() && validerCodeSecurite();
+        return validerNumero() && validerDateExpiration() && validerCodeSecurite();
     }
 
     /**
