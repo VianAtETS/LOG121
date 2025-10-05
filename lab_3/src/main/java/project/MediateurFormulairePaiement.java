@@ -105,11 +105,15 @@ public class MediateurFormulairePaiement implements Mediateur {
                 carteCadeauBox.setVisible(false);
                 carteCadeauBox.setManaged(false);
 
-                // Désactiver les options de livraison
-                optionLivraisonCombo.setDisable(true);
-                champAdresseLivraison.setDisable(true);
-                champAdresseFacturation.setDisable(true);
-                caseACocherMemeAdresse.setDisable(true);
+                // Activer les options de livraison
+                optionLivraisonCombo.setDisable(false);
+                champAdresseLivraison.setDisable(false);
+
+                if (!caseACocherMemeAdresse.isSelected()) {
+                    champAdresseFacturation.setDisable(false);
+                }
+
+                caseACocherMemeAdresse.setDisable(false);
 
                 // Mettre à jour le modèle
                 formulairePaiement.setModePaiement(ModePaiement.CARTE_CREDIT);
@@ -125,8 +129,8 @@ public class MediateurFormulairePaiement implements Mediateur {
                 carteCadeauBox.setManaged(true);
 
                 // Désactiver les options de livraison
-                optionLivraisonCombo.setDisable(true);
-                champAdresseLivraison.setDisable(true);
+                optionLivraisonCombo.setDisable(false);
+                champAdresseLivraison.setDisable(false);
                 champAdresseFacturation.setDisable(true);
                 caseACocherMemeAdresse.setDisable(true);
 
@@ -143,7 +147,11 @@ public class MediateurFormulairePaiement implements Mediateur {
 
                 // Activer les champs d'adresse et options de livraison
                 champAdresseLivraison.setDisable(false);
-                champAdresseFacturation.setDisable(false);
+
+                if (!caseACocherMemeAdresse.isSelected()) {
+                    champAdresseFacturation.setDisable(false);
+                }
+
                 caseACocherMemeAdresse.setDisable(false);
                 optionLivraisonCombo.setDisable(false);
 
