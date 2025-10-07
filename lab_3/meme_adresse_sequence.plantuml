@@ -1,0 +1,51 @@
+@startuml MemeAdresseSelection
+skinparam defaultFontSize 14
+skinparam sequenceMessageAlign center
+
+title Laboratoire #3 - Sélection "Même adresse" - Diagramme de Séquence
+
+participant ":ControleurFormulaire\nPaiement" as Controleur
+participant ":MediateurFormulaire\nPaiement" as Mediateur
+participant "caseACocher\nMemeAdresse\n:CheckBox" as CheckBox
+participant "champAdresse\nLivraison\n:TextField" as AdresseLiv
+participant "champAdresse\nFacturation\n:TextField" as AdresseFactu
+participant ":FormulairePaiement" as Formulaire
+participant "labelErreur\n:Label" as Label
+
+Controleur -> Mediateur : notifier(MEME_ADRESSE_CHANGE)
+activate Mediateur
+
+Mediateur -> CheckBox : isSelected()
+CheckBox --> Mediateur : true
+
+alt Case cochée (copier l'adresse de livraison)
+    group Lecture de l'adresse de livraison
+        Mediateur -> AdresseLiv : getText()
+        AdresseLiv --> Mediateur : "rue, ville, codePostal, pays"
+    end
+
+    group Mise à jour du champ de facturation
+        Mediateur -> AdresseFactu : setText(valeurAdresseLivraison)
+        Mediateur -> AdresseFactu : setDisable(true)
+        Mediateur -> AdresseFactu : setManaged(false)
+    end
+
+    group Mise à jour du modèle
+        Mediateur -> Formulaire : setMemeAdresse(true)
+        Mediateur -> Mediateur : mettreAJourDonneesFormulaire()
+    end
+
+    group Validation du formulaire
+        Mediateur -> Mediateur : validerFormulaire()
+        alt formulaire invalide
+            Mediateur -> Label : setVisible(true)
+            note right: Affiche une erreur si des champs
+            note right: requis sont manquants ou invalides
+        else formulaire valide
+            Mediateur -> Label : setVisible(false)
+        end
+    end
+end
+
+deactivate Mediateur
+@enduml

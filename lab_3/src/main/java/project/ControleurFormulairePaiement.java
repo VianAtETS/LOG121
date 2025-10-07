@@ -42,6 +42,9 @@ public class ControleurFormulairePaiement {
     @FXML
     private ComboBox<String> optionLivraisonCombo;
 
+    @FXML
+    private javafx.scene.control.Label labelErreur;
+
     private MediateurFormulairePaiement mediateur;
 
     @FXML
@@ -60,6 +63,7 @@ public class ControleurFormulairePaiement {
         mediateur.setChampAdresseFacturation(adresseFacturationField);
         mediateur.setCaseACocherMemeAdresse(memeAdresseCheckBox);
         mediateur.setOptionLivraisonCombo(optionLivraisonCombo);
+        mediateur.setLabelErreur(labelErreur);
 
         // Configurer les listeners
         modePaiementCombo.setOnAction(event -> {

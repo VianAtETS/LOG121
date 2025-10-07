@@ -94,4 +94,7 @@
             </items>
         </ComboBox>
     </HBox>
+
+    <!-- Label d'erreur -->
+    <Label fx:id="labelErreur" wrapText="true" maxWidth="460" style="-fx-text-fill: red; -fx-font-weight: bold; -fx-padding: 10;" />
 </VBox>

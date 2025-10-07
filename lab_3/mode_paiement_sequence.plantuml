@@ -1,0 +1,106 @@
+@startuml ChangementModePaiement
+skinparam defaultFontSize 14
+skinparam sequenceMessageAlign center
+
+title Laboratoire #3 - Changement du Mode de Paiement - Diagramme de Séquence
+
+participant ":ControleurFormulaire\nPaiement" as Controleur
+participant ":MediateurFormulaire\nPaiement" as Mediateur
+participant "modePaiementCombo\n:ComboBox" as Combo
+participant "carteCreditBox\n:VBox" as CCBox
+participant "carteCadeauBox\n:HBox" as CGBox
+participant "champAdresse\nLivraison\n:TextField" as AdresseLiv
+participant "champAdresse\nFacturation\n:TextField" as AdresseFactu
+participant "caseACocher\nMemeAdresse\n:CheckBox" as CheckBox
+participant "optionLivraison\nCombo\n:ComboBox" as OptionCombo
+participant ":FormulairePaiement" as Formulaire
+participant "labelErreur\n:Label" as Label
+
+Controleur -> Mediateur : notifier(MODE_PAIEMENT_CHANGE)
+activate Mediateur
+
+Mediateur -> Combo : getValue()
+Combo --> Mediateur : valeur du mode de paiement sélectionné
+
+alt "Carte de crédit"
+    group Affichage champs carte de crédit
+        Mediateur -> CCBox : setVisible(true)
+        Mediateur -> CCBox : setManaged(true)
+    end
+
+    group Masquage champs carte cadeau
+        Mediateur -> CGBox : setVisible(false)
+        Mediateur -> CGBox : setManaged(false)
+    end
+
+    group Activation champs livraison
+        Mediateur -> OptionCombo : setDisable(false)
+        Mediateur -> AdresseLiv : setDisable(false)
+    end
+
+    group Gestion adresse facturation
+        Mediateur -> CheckBox : isSelected()
+        CheckBox --> Mediateur : false
+        Mediateur -> AdresseFactu : setDisable(false)
+        Mediateur -> CheckBox : setDisable(false)
+    end
+
+    Mediateur -> Formulaire : setModePaiement(CARTE_CREDIT)
+    Mediateur -> Mediateur : mettreAJourDonneesFormulaire()
+    Mediateur -> Mediateur : validerCarteCredit()
+    Mediateur -> Label : setVisible(false/true)
+    note right: Affiche une erreur si les champs de carte\nne sont pas remplis
+
+else "Carte cadeau"
+    group Masquage champs carte de crédit
+        Mediateur -> CCBox : setVisible(false)
+        Mediateur -> CCBox : setManaged(false)
+    end
+
+    group Affichage champs carte cadeau
+        Mediateur -> CGBox : setVisible(true)
+        Mediateur -> CGBox : setManaged(true)
+    end
+
+    group Activation/Désactivation champs
+        Mediateur -> OptionCombo : setDisable(false)
+        Mediateur -> AdresseLiv : setDisable(false)
+        Mediateur -> AdresseFactu : setDisable(true)
+        Mediateur -> CheckBox : setDisable(true)
+    end
+
+    Mediateur -> Formulaire : setModePaiement(CARTE_CADEAU)
+    Mediateur -> Mediateur : mettreAJourDonneesFormulaire()
+    Mediateur -> Mediateur : validerCarteCadeau()
+
+else "Paiement à la livraison"
+    group Masquage tous les champs de carte
+        Mediateur -> CCBox : setVisible(false)
+        Mediateur -> CCBox : setManaged(false)
+        Mediateur -> CGBox : setVisible(false)
+        Mediateur -> CGBox : setManaged(false)
+    end
+
+    group Activation champs livraison
+        Mediateur -> AdresseLiv : setDisable(false)
+        Mediateur -> CheckBox : isSelected()
+        CheckBox --> Mediateur : false
+        Mediateur -> AdresseFactu : setDisable(false)
+        Mediateur -> CheckBox : setDisable(false)
+        Mediateur -> OptionCombo : setDisable(false)
+    end
+
+    group Restriction options livraison
+        Mediateur -> OptionCombo : setItems(liste sans "Laisser à la porte")
+        note right: Retire l'option "Laisser à la porte"\ncar paiement requis en personne
+    end
+
+    Mediateur -> Formulaire : setModePaiement(PAIEMENT_LIVRAISON)
+    Mediateur -> Mediateur : mettreAJourDonneesFormulaire()
+    Mediateur -> Mediateur : validerPaiementLivraison()
+    Mediateur -> Label : setVisible(false)
+    note right: Pas de validation carte\npour paiement livraison
+end
+
+deactivate Mediateur
+@enduml

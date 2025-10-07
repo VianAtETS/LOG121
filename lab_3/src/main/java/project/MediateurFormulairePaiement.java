@@ -3,6 +3,7 @@ package project;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.collections.FXCollections;
@@ -21,6 +22,7 @@ public class MediateurFormulairePaiement implements Mediateur {
     private CheckBox caseACocherMemeAdresse;
     private ComboBox<String> optionLivraisonCombo;
     private FormulairePaiement formulairePaiement;
+    private Label labelErreur; // Nouveau label pour les erreurs
 
     public MediateurFormulairePaiement() {
         this.formulairePaiement = new FormulairePaiement();
@@ -33,6 +35,10 @@ public class MediateurFormulairePaiement implements Mediateur {
 
     public void setChampCarteCredit(TextField[] champs) {
         this.champCarteCredit = champs;
+        // Ajouter des listeners pour validation en temps réel
+        for (TextField champ : champs) {
+            champ.textProperty().addListener((obs, old, nouveau) -> validerFormulaire());
+        }
     }
 
     public void setCarteCreditBox(VBox box) {
@@ -41,6 +47,8 @@ public class MediateurFormulairePaiement implements Mediateur {
 
     public void setChampCarteCadeau(TextField champ) {
         this.champCarteCadeau = champ;
+        // Listener pour validation en temps réel
+        champ.textProperty().addListener((obs, old, nouveau) -> validerFormulaire());
     }
 
     public void setCarteCadeauBox(HBox box) {
@@ -63,9 +71,10 @@ public class MediateurFormulairePaiement implements Mediateur {
         this.optionLivraisonCombo = combo;
     }
 
-    @Override
-    public void ajouterComposant(Composant composant) {
-        composant.setMediateur(this);
+    public void setLabelErreur(Label label) {
+        this.labelErreur = label;
+        this.labelErreur.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+        this.labelErreur.setVisible(false);
     }
 
     public void notifier(Events evenement) {
@@ -82,6 +91,7 @@ public class MediateurFormulairePaiement implements Mediateur {
             default:
                 break;
         }
+        validerFormulaire();
     }
 
     public FormulairePaiement getFormulairePaiement() {
@@ -96,16 +106,11 @@ public class MediateurFormulairePaiement implements Mediateur {
         }
 
         switch (modePaiement) {
-            case "Carte de crédit": // J'aimerais éviter les strings magiques ici
-                // Afficher les champs de carte de crédit
+            case "Carte de crédit":
                 carteCreditBox.setVisible(true);
                 carteCreditBox.setManaged(true);
-
-                // Masquer les champs de carte cadeau
                 carteCadeauBox.setVisible(false);
                 carteCadeauBox.setManaged(false);
-
-                // Activer les options de livraison
                 optionLivraisonCombo.setDisable(false);
                 champAdresseLivraison.setDisable(false);
 
@@ -114,38 +119,26 @@ public class MediateurFormulairePaiement implements Mediateur {
                 }
 
                 caseACocherMemeAdresse.setDisable(false);
-
-                // Mettre à jour le modèle
                 formulairePaiement.setModePaiement(ModePaiement.CARTE_CREDIT);
                 break;
 
-            case "Carte cadeau": // J'aimerais éviter les strings magiques ici
-                // Masquer les champs de carte de crédit
+            case "Carte cadeau":
                 carteCreditBox.setVisible(false);
                 carteCreditBox.setManaged(false);
-
-                // Afficher les champs de carte cadeau
                 carteCadeauBox.setVisible(true);
                 carteCadeauBox.setManaged(true);
-
-                // Désactiver les options de livraison
                 optionLivraisonCombo.setDisable(false);
                 champAdresseLivraison.setDisable(false);
                 champAdresseFacturation.setDisable(true);
                 caseACocherMemeAdresse.setDisable(true);
-
-                // Mettre à jour le modèle
                 formulairePaiement.setModePaiement(ModePaiement.CARTE_CADEAU);
                 break;
 
-            case "Paiement à la livraison": // J'aimerais éviter les strings magiques ici
-                // Masquer tous les champs de carte
+            case "Paiement à la livraison":
                 carteCreditBox.setVisible(false);
                 carteCreditBox.setManaged(false);
                 carteCadeauBox.setVisible(false);
                 carteCadeauBox.setManaged(false);
-
-                // Activer les champs d'adresse et options de livraison
                 champAdresseLivraison.setDisable(false);
 
                 if (!caseACocherMemeAdresse.isSelected()) {
@@ -154,12 +147,8 @@ public class MediateurFormulairePaiement implements Mediateur {
 
                 caseACocherMemeAdresse.setDisable(false);
                 optionLivraisonCombo.setDisable(false);
-
-                // Retirer l'option "Laisser à la porte"
                 optionLivraisonCombo.setItems(FXCollections.observableArrayList(
                         "Livraison en main propre", "Se retrouver à l'extérieur"));
-
-                // Mettre à jour le modèle
                 formulairePaiement.setModePaiement(ModePaiement.PAIEMENT_LIVRAISON);
                 break;
 
@@ -174,12 +163,9 @@ public class MediateurFormulairePaiement implements Mediateur {
         boolean memeAdresse = caseACocherMemeAdresse.isSelected();
 
         if (memeAdresse) {
-            // Désactiver le champ adresse de facturation
             champAdresseFacturation.setDisable(true);
-            // Copier l'adresse de livraison dans l'adresse de facturation
             champAdresseFacturation.setText(champAdresseLivraison.getText());
         } else {
-            // Activer le champ adresse de facturation
             champAdresseFacturation.setDisable(false);
         }
 
@@ -191,7 +177,6 @@ public class MediateurFormulairePaiement implements Mediateur {
         boolean memeAdresse = caseACocherMemeAdresse.isSelected();
 
         if (memeAdresse) {
-            // Si "même adresse" est cochée, mettre à jour l'adresse de facturation
             champAdresseFacturation.setText(champAdresseLivraison.getText());
         }
 
@@ -199,14 +184,12 @@ public class MediateurFormulairePaiement implements Mediateur {
     }
 
     private void mettreAJourDonneesFormulaire() {
-        // Mettre à jour le mode de paiement
         String modePaiement = modePaiementCombo.getValue();
         if (modePaiement != null) {
             switch (modePaiement) {
                 case "Carte de crédit":
                     formulairePaiement.setModePaiement(ModePaiement.CARTE_CREDIT);
 
-                    // Créer l'objet CarteCredit si les champs sont remplis
                     if (champCarteCredit[0].getText() != null
                             && !champCarteCredit[0].getText().isEmpty()) {
                         try {
@@ -215,7 +198,7 @@ public class MediateurFormulairePaiement implements Mediateur {
                                     dateExp, champCarteCredit[2].getText());
                             formulairePaiement.setCarteCredit(carte);
                         } catch (Exception e) {
-                            // Date invalide, on ne met pas à jour
+                            formulairePaiement.setCarteCredit(null);
                         }
                     }
                     break;
@@ -223,7 +206,6 @@ public class MediateurFormulairePaiement implements Mediateur {
                 case "Carte cadeau":
                     formulairePaiement.setModePaiement(ModePaiement.CARTE_CADEAU);
 
-                    // Créer l'objet CarteCadeau si le champ est rempli
                     if (champCarteCadeau.getText() != null
                             && !champCarteCadeau.getText().isEmpty()) {
                         CarteCadeau carte = new CarteCadeau(champCarteCadeau.getText());
@@ -237,10 +219,8 @@ public class MediateurFormulairePaiement implements Mediateur {
             }
         }
 
-        // Mettre à jour les adresses (simplifié - normalement on devrait parser l'adresse)
         formulairePaiement.setMemeAdresse(caseACocherMemeAdresse.isSelected());
 
-        // Mettre à jour l'option de livraison
         String optionLivraison = optionLivraisonCombo.getValue();
         if (optionLivraison != null) {
             switch (optionLivraison) {
@@ -259,11 +239,114 @@ public class MediateurFormulairePaiement implements Mediateur {
 
     private Date parseDate(String dateStr) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/yy");
+        sdf.setLenient(false);
         return sdf.parse(dateStr);
     }
 
     private void validerFormulaire() {
-        boolean estValide = formulairePaiement.validerFormulaire();
-        System.out.println("Formulaire valide: " + estValide);
+        if (labelErreur == null) {
+            return; // Pas de label d'erreur configuré
+        }
+
+        mettreAJourDonneesFormulaire();
+
+        String modePaiement = modePaiementCombo.getValue();
+        if (modePaiement == null) {
+            afficherErreur("Veuillez sélectionner un mode de paiement.");
+            return;
+        }
+
+        switch (modePaiement) {
+            case "Carte de crédit":
+                validerCarteCredit();
+                break;
+            case "Carte cadeau":
+                validerCarteCadeau();
+                break;
+            case "Paiement à la livraison":
+                validerPaiementLivraison();
+                break;
+        }
+    }
+
+    private void validerCarteCredit() {
+        String numero = champCarteCredit[0].getText();
+        String dateExp = champCarteCredit[1].getText();
+        String cvv = champCarteCredit[2].getText();
+
+        // Vérifier si les champs sont vides
+        if (numero == null || numero.trim().isEmpty()) {
+            cacherErreur();
+            return;
+        }
+
+        if (dateExp == null || dateExp.trim().isEmpty()) {
+            afficherErreur("La date d'expiration est requise.");
+            return;
+        }
+
+        if (cvv == null || cvv.trim().isEmpty()) {
+            afficherErreur("Le code de sécurité est requis.");
+            return;
+        }
+
+        // Créer et valider la carte
+        try {
+            Date date = parseDate(dateExp);
+            CarteCredit carte = new CarteCredit(numero, date, cvv);
+
+            if (!carte.valider()) {
+                // Déterminer quel champ est invalide
+                if (!carte.validerNumero()) {
+                    afficherErreur(
+                            "Numéro de carte invalide (doit être 16 chiffres et passer l'algorithme de Luhn).");
+                } else if (!cvv.matches("\\d{3,4}")) {
+                    afficherErreur("Code de sécurité invalide (doit être 3 ou 4 chiffres).");
+                } else if (date.before(new Date())) {
+                    afficherErreur("La carte de crédit est expirée.");
+                } else {
+                    afficherErreur("Informations de carte de crédit invalides.");
+                }
+            } else {
+                cacherErreur();
+            }
+        } catch (ParseException e) {
+            afficherErreur("Format de date invalide (utilisez MM/AA).");
+        }
+    }
+
+    private void validerCarteCadeau() {
+        String numero = champCarteCadeau.getText();
+
+        if (numero == null || numero.trim().isEmpty()) {
+            cacherErreur();
+            return;
+        }
+
+        CarteCadeau carte = new CarteCadeau(numero);
+
+        if (!carte.valider()) {
+            afficherErreur("Numéro de carte cadeau invalide (doit être 16 chiffres).");
+        } else {
+            cacherErreur();
+        }
+    }
+
+    private void validerPaiementLivraison() {
+        // Pour le paiement à la livraison, pas de validation de carte nécessaire
+        cacherErreur();
+    }
+
+    private void afficherErreur(String message) {
+        if (labelErreur != null) {
+            labelErreur.setText("❌ " + message);
+            labelErreur.setVisible(true);
+        }
+    }
+
+    private void cacherErreur() {
+        if (labelErreur != null) {
+            labelErreur.setVisible(false);
+        }
     }
 }
