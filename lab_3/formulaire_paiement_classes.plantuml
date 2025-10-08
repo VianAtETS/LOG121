@@ -1,0 +1,258 @@
+@startuml FormulairePaiement
+left to right direction
+skinparam linetype ortho
+skinparam defaultFontSize 14
+skinparam classFontSize 16
+skinparam noteFontSize 12
+
+title Laboratoire #3 - Formulaire de Paiement - Diagramme de Classes
+
+' Enums
+enum ModePaiement {
+    CARTE_CREDIT
+    CARTE_CADEAU
+    PAIEMENT_LIVRAISON
+    - label: String
+    + ModePaiement(label: String)
+    + toString(): String
+}
+
+enum OptionLivraison {
+    LIVRAISON_MAIN_PROPRE
+    RENCONTRE_EXTERIEUR
+    LAISSER_PORTE
+}
+
+enum Events {
+    MODE_PAIEMENT_CHANGE
+    ADRESSE_LIVRAISON_CHANGE
+    ADRESSE_FACTURATION_CHANGE
+    OPTION_LIVRAISON_CHANGE
+    MEME_ADRESSE_CHANGE
+}
+
+' Classes métier
+abstract class Carte {
+    # numero: String
+    + Carte(numero: String)
+    + valider(): boolean
+    # validerNumero(): boolean
+}
+
+class CarteCredit extends Carte {
+    - dateExpiration: Date
+    - codeSecurite: String
+    + CarteCredit(numero: String, dateExpiration: Date, codeSecurite: String)
+    + valider(): boolean
+    # validerNumero(): boolean
+    - validerPrefixe(): boolean
+    - validerDateExpiration(): boolean
+    - validerCodeSecurite(): boolean
+}
+
+class CarteCadeau extends Carte {
+    + CarteCadeau(numero: String)
+    + valider(): boolean
+}
+
+class Adresse {
+    - rue: String
+    - ville: String
+    - codePostal: String
+    - pays: String
+    - region: String
+    + Adresse(rue: String, ville: String, codePostal: String, pays: String)
+    + Adresse(rue: String, ville: String, codePostal: String, pays: String, region: String)
+    + valider(): boolean
+    - validerRue(): boolean
+    - validerVille(): boolean
+    - validerCodePostal(): boolean
+    - validerPays(): boolean
+    - validerRegion(): boolean
+    + toString(): String
+    + equals(Object): boolean
+}
+
+class FormulairePaiement {
+    - modePaiement: ModePaiement
+    - carteCredit: CarteCredit
+    - carteCadeau: CarteCadeau
+    - adresseLivraison: Adresse
+    - adresseFacturation: Adresse
+    - optionLivraison: OptionLivraison
+    - memeAdresse: boolean
+    + validerFormulaire(): boolean
+    + getModePaiement(): ModePaiement
+    + setModePaiement(methode: ModePaiement): void
+    + getCarteCredit(): CarteCredit
+    + setCarteCredit(carte: CarteCredit): void
+    + getCarteCadeau(): CarteCadeau
+    + setCarteCadeau(carte: CarteCadeau): void
+    + getAdresseLivraison(): Adresse
+    + setAdresseLivraison(adresse: Adresse): void
+    + getAdresseFacturation(): Adresse
+    + setAdresseFacturation(adresse: Adresse): void
+    + isMemeAdresse(): boolean
+    + setMemeAdresse(meme: boolean): void
+    + getOptionLivraison(): OptionLivraison
+    + setOptionLivraison(option: OptionLivraison): void
+}
+
+' Interface Mediateur
+interface Mediateur {
+    + notifier(evenement: Events): void
+}
+
+' Classe concrète du Médiateur
+class MediateurFormulairePaiement {
+    - modePaiementCombo: ComboBox<String>
+    - champCarteCredit: TextField[]
+    - carteCreditBox: VBox
+    - champCarteCadeau: TextField
+    - carteCadeauBox: HBox
+    - champAdresseLivraison: TextField
+    - champAdresseFacturation: TextField
+    - caseACocherMemeAdresse: CheckBox
+    - optionLivraisonCombo: ComboBox<String>
+    - formulairePaiement: FormulairePaiement
+    - labelErreur: Label
+
+    + MediateurFormulairePaiement()
+    + setModePaiementCombo(combo: ComboBox<String>): void
+    + setChampCarteCredit(champs: TextField[]): void
+    + setCarteCreditBox(box: VBox): void
+    + setChampCarteCadeau(champ: TextField): void
+    + setCarteCadeauBox(box: HBox): void
+    + setChampAdresseLivraison(champ: TextField): void
+    + setChampAdresseFacturation(champ: TextField): void
+    + setCaseACocherMemeAdresse(checkBox: CheckBox): void
+    + setOptionLivraisonCombo(combo: ComboBox<String>): void
+    + setLabelErreur(label: Label): void
+    + notifier(evenement: Events): void
+    + getFormulairePaiement(): FormulairePaiement
+    - gererChangementModePaiement(): void
+    - gererChangementMemeAdresse(): void
+    - gererChangementAdresseLivraison(): void
+    - mettreAJourDonneesFormulaire(): void
+    - validerFormulaire(): void
+    - validerCarteCredit(): void
+    - validerCarteCadeau(): void
+    - validerPaiementLivraison(): void
+    - afficherErreur(message: String): void
+    - cacherErreur(): void
+    - parseDate(dateStr: String): Date
+}
+
+' Contrôleur JavaFX
+class ControleurFormulairePaiement {
+    - modePaiementCombo: ComboBox<String>
+    - carteCreditBox: VBox
+    - numeroCreditField: TextField
+    - dateExpirationField: TextField
+    - codeSecuriteField: TextField
+    - carteCadeauBox: HBox
+    - numeroCadeauField: TextField
+    - adresseLivraisonField: TextField
+    - memeAdresseCheckBox: CheckBox
+    - adresseFacturationField: TextField
+    - optionLivraisonCombo: ComboBox<String>
+    - labelErreur: Label
+    - mediateur: MediateurFormulairePaiement
+
+    + initialize(): void
+}
+
+' Classe principale
+class App {
+    - {static} scene: Scene
+    + start(stage: Stage): void
+    + {static} setRoot(fxml: String): void
+    - {static} loadFXML(fxml: String): Parent
+    + {static} main(args: String[]): void
+}
+
+' Composants JavaFX (simplifiés)
+package "JavaFX" <<Rectangle>> {
+    class ComboBox<T>
+    class TextField
+    class CheckBox
+    class VBox
+    class HBox
+    class Label
+}
+
+' Relations principales
+Mediateur <|.. MediateurFormulairePaiement
+Carte <|-- CarteCredit
+Carte <|-- CarteCadeau
+
+MediateurFormulairePaiement o-- "1" FormulairePaiement : gère
+MediateurFormulairePaiement --> Events : utilise
+
+FormulairePaiement *-- "0..1" CarteCredit
+FormulairePaiement *-- "0..1" CarteCadeau
+FormulairePaiement *-- "0..1" Adresse : adresseLivraison
+FormulairePaiement *-- "0..1" Adresse : adresseFacturation
+FormulairePaiement --> ModePaiement
+FormulairePaiement --> OptionLivraison
+
+ControleurFormulairePaiement o-- "1" MediateurFormulairePaiement : utilise
+ControleurFormulairePaiement ..> ComboBox : @FXML
+ControleurFormulairePaiement ..> TextField : @FXML
+ControleurFormulairePaiement ..> CheckBox : @FXML
+ControleurFormulairePaiement ..> VBox : @FXML
+ControleurFormulairePaiement ..> HBox : @FXML
+ControleurFormulairePaiement ..> Label : @FXML
+
+MediateurFormulairePaiement o-- "1" ComboBox : modePaiementCombo
+MediateurFormulairePaiement o-- "3" TextField : champCarteCredit
+MediateurFormulairePaiement o-- "1" VBox : carteCreditBox
+MediateurFormulairePaiement o-- "1" TextField : champCarteCadeau
+MediateurFormulairePaiement o-- "1" HBox : carteCadeauBox
+MediateurFormulairePaiement o-- "1" TextField : champAdresseLivraison
+MediateurFormulairePaiement o-- "1" TextField : champAdresseFacturation
+MediateurFormulairePaiement o-- "1" CheckBox : caseACocherMemeAdresse
+MediateurFormulairePaiement o-- "1" ComboBox : optionLivraisonCombo
+MediateurFormulairePaiement o-- "1" Label : labelErreur
+
+App ..> ControleurFormulairePaiement : charge
+
+note top of MediateurFormulairePaiement
+    Le médiateur gère toute la logique
+    d'interaction via notifier(Events).
+
+    Contient maintenant:
+    - Validation en temps réel
+    - Affichage des erreurs
+    - Gestion des listeners
+end note
+
+note bottom of CarteCredit
+    Validation complète avec:
+    - Algorithme de Luhn
+    - Vérification des préfixes (BIN)
+    - Date d'expiration
+    - CVV (3-4 chiffres)
+end note
+
+note right of ControleurFormulairePaiement
+    Contrôleur JavaFX qui:
+    - Initialise les composants @FXML
+    - Crée le médiateur
+    - Configure les listeners
+    - Délègue toute logique au médiateur
+end note
+
+note left of FormulairePaiement
+    Modèle de données central.
+    Contient la logique de validation
+    selon le mode de paiement.
+end note
+
+note bottom of Events
+    Énumération des événements
+    du formulaire (remplace les
+    strings magiques)
+end note
+
+@enduml
