@@ -1,5 +1,5 @@
 {
-    "name": "JavaFX Development Environment",
+    "name": "ÉTS - LOG121",
     "image": "mcr.microsoft.com/devcontainers/java:21-bullseye",
     "features": {
         "ghcr.io/devcontainers/features/java:1": {
@@ -30,11 +30,18 @@
             }
         }
     },
-    "runArgs": ["--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined"],
+    "runArgs": [
+        "--cap-add=SYS_PTRACE",
+        "--security-opt",
+        "seccomp=unconfined"
+    ],
     "postCreateCommand": {
         "JavaFX": "bash .devcontainer/setup-javafx.sh",
         "PlantUML": "bash .devcontainer/setup-plantuml.sh"
     },
-    "forwardPorts": [6080, 5901],
+    "forwardPorts": [
+        6080,
+        5901
+    ],
     "remoteUser": "vscode"
 }
