@@ -5,243 +5,302 @@ skinparam noteFontSize 12
 
 title Laboratoire #4 - Algorithmes de Tri - Diagramme de Classes
 
-abstract class TrieAlgorithme {
+abstract class AlgorithmeTri {
   # collection: List<Integer>
-  # visualisateur: Visualisateur
-  # etapes: List<EtapeTri>
+  # observateur: ObservateurTri
 
-  + TrieAlgorithme(collection: List<Integer>, visualisateur: Visualisateur)
-  + trier(): List<Integer>
-  # diviser(debut: int, fin: int): void
-  # fusionner(debut: int, milieu: int, fin: int): void
-  # estTrie(debut: int, fin: int): boolean
-  # enregistrerEtape(description: String): void
+  + AlgorithmeTri(collection: List<Integer>)
+  + setObservateur(observateur: ObservateurTri): void
+  + executer(): void
+  # notifierEtape(description: String, indices: Map<String, Integer>): void
+  # copierCollection(): List<Integer>
 
   ' MÉTHODE TEMPLATE
-  ' trier(): List<Integer>
-  '   etapes.clear()
-  '   enregistrerEtape("État initial")
-  '   trierRecursif(0, collection.size() - 1)
-  '   enregistrerEtape("État final - trié")
-  '   return collection
+  ' executer(): void
+  '   copie = copierCollection()
+  '   notifierEtape("État initial", null)
+  '   trierRecursif(copie, 0, copie.size() - 1)
+  '   notifierEtape("Tri terminé", null)
 
-  ' trierRecursif(debut: int, fin: int): void
-  '   if (!estTrie(debut, fin)) then
-  '     diviser(debut, fin)  // méthode abstraite
-  '     fusionner(debut, milieu, fin)  // méthode abstraite
-  '     enregistrerEtape("Après fusion")
-
-  {abstract} # trierRecursif(debut: int, fin: int): void
+  {abstract} # trierRecursif(liste: List<Integer>, debut: int, fin: int): void
 }
 
 class QuickSort {
-  - pivot: int
-
-  + QuickSort(collection: List<Integer>, visualisateur: Visualisateur)
-  # trierRecursif(debut: int, fin: int): void
-  - partitionner(debut: int, fin: int): int
+  + QuickSort(collection: List<Integer>)
+  # trierRecursif(liste: List<Integer>, debut: int, fin: int): void
+  - partitionner(liste: List<Integer>, debut: int, fin: int): int
   - choisirPivot(debut: int, fin: int): int
+  - echanger(liste: List<Integer>, i: int, j: int): void
 
-  ' trierRecursif(debut, fin):
+  ' trierRecursif(liste, debut, fin):
   '   if (debut < fin) then
-  '     pivotIndex = partitionner(debut, fin)
-  '     enregistrerEtape("Partitionnement autour du pivot")
-  '     trierRecursif(debut, pivotIndex - 1)
-  '     trierRecursif(pivotIndex + 1, fin)
+  '     pivotIndex = partitionner(liste, debut, fin)
+  '     indices = Map("pivot", pivotIndex)
+  '     notifierEtape("Partitionnement", indices)
+  '     trierRecursif(liste, debut, pivotIndex - 1)
+  '     trierRecursif(liste, pivotIndex + 1, fin)
 
-  ' partitionner(debut, fin): int
-  '   pivot = choisirPivot(debut, fin)
-  '   i = debut - 1
+  ' partitionner(liste, debut, fin): int
+  '   pivotIndex = choisirPivot(debut, fin)
+  '   pivot = liste[pivotIndex]
+  '   echanger(liste, pivotIndex, fin)
+  '   i = debut
   '   for j = debut to fin - 1
-  '     if collection[j] < pivot then
+  '     if liste[j] < pivot then
+  '       echanger(liste, i, j)
+  '       indices = Map("i", i, "j", j)
+  '       notifierEtape("Échange", indices)
   '       i++
-  '       échanger(collection[i], collection[j])
-  '   échanger(collection[i + 1], collection[fin])
-  '   return i + 1
+  '   echanger(liste, i, fin)
+  '   return i
 }
 
 class MergeSort {
-  + MergeSort(collection: List<Integer>, visualisateur: Visualisateur)
-  # trierRecursif(debut: int, fin: int): void
-  - fusionnerSousCollections(debut: int, milieu: int, fin: int): void
+  + MergeSort(collection: List<Integer>)
+  # trierRecursif(liste: List<Integer>, debut: int, fin: int): void
+  - fusionner(liste: List<Integer>, debut: int, milieu: int, fin: int): void
 
-  ' trierRecursif(debut, fin):
+  ' trierRecursif(liste, debut, fin):
   '   if (debut < fin) then
   '     milieu = (debut + fin) / 2
-  '     trierRecursif(debut, milieu)
-  '     trierRecursif(milieu + 1, fin)
-  '     fusionnerSousCollections(debut, milieu, fin)
-  '     enregistrerEtape("Fusion des sous-collections")
+  '     indices = Map("debut", debut, "milieu", milieu, "fin", fin)
+  '     notifierEtape("Division", indices)
+  '     trierRecursif(liste, debut, milieu)
+  '     trierRecursif(liste, milieu + 1, fin)
+  '     fusionner(liste, debut, milieu, fin)
+  '     notifierEtape("Fusion", indices)
 
-  ' fusionnerSousCollections(debut, milieu, fin):
-  '   copie1 = collection[debut..milieu]
-  '   copie2 = collection[milieu+1..fin]
+  ' fusionner(liste, debut, milieu, fin):
+  '   gauche = liste[debut..milieu]
+  '   droite = liste[milieu+1..fin]
   '   i = 0, j = 0, k = debut
-  '   while (i < copie1.size() && j < copie2.size())
-  '     if (copie1[i] <= copie2[j]) then
-  '       collection[k++] = copie1[i++]
+  '   while (i < gauche.size() && j < droite.size())
+  '     if (gauche[i] <= droite[j]) then
+  '       liste[k] = gauche[i++]
   '     else
-  '       collection[k++] = copie2[j++]
-  '   copier les éléments restants
+  '       liste[k] = droite[j++]
+  '     k++
+  '   copier les éléments restants de gauche et droite
 }
 
 class EtapeTri {
   - description: String
   - collectionState: List<Integer>
-  - timestamp: long
   - indices: Map<String, Integer>
-  - elementsEnComparaison: Set<Integer>
-  - elementsModifies: Set<Integer>
+  - timestamp: long
 
-  + EtapeTri(description: String, collection: List<Integer>)
+  + EtapeTri(description: String, collection: List<Integer>, indices: Map<String, Integer>)
   + getDescription(): String
   + getCollectionState(): List<Integer>
   + getIndices(): Map<String, Integer>
-  + setIndice(nom: String, valeur: int): void
-  + marquerComparaison(index1: int, index2: int): void
-  + marquerModification(index: int): void
-  + getElementsEnComparaison(): Set<Integer>
-  + getElementsModifies(): Set<Integer>
+  + getTimestamp(): long
 }
 
-interface Visualisateur {
-  + afficherEtape(etape: EtapeTri): void
-  + demarrerAnimation(): void
-  + pauserAnimation(): void
-  + arreterAnimation(): void
-  + setVitesseAnimation(vitesse: int): void
+interface ObservateurTri {
+  + notifierNouvelleEtape(etape: EtapeTri): void
+  + notifierFinTri(): void
 }
 
-class VisualisateurGraphique {
-  - canvas: Canvas
-  - timeline: Timeline
-  - vitesseAnimation: int
-  - etapesCourantes: List<EtapeTri>
-  - indexEtapeCourante: int
-  - couleurs: Map<Integer, Color>
+class GestionnaireTri {
+  - algorithme: AlgorithmeTri
+  - etapes: List<EtapeTri>
+  - collectionInitiale: List<Integer>
 
-  + VisualisateurGraphique(canvas: Canvas)
-  + afficherEtape(etape: EtapeTri): void
-  + demarrerAnimation(): void
-  + pauserAnimation(): void
-  + arreterAnimation(): void
-  + setVitesseAnimation(vitesse: int): void
-  - dessinerBarres(collection: List<Integer>): void
-  - dessinerIndices(indices: Map<String, Integer>): void
-  - animerTransition(etapeActuelle: EtapeTri, etapeSuivante: EtapeTri): void
-  - calculerCouleurBarre(valeur: int, index: int, etape: EtapeTri): Color
-  - calculerHauteurBarre(valeur: int, maxValeur: int): double
-  - calculerLargeurBarre(nbElements: int): double
-
-  ' dessinerBarres(collection):
-  '   gc = canvas.getGraphicsContext2D()
-  '   gc.clearRect(0, 0, canvas.width, canvas.height)
-  '   largeurBarre = calculerLargeurBarre(collection.size())
-  '   maxValeur = collection.max()
-  '   for i = 0 to collection.size() - 1
-  '     hauteur = calculerHauteurBarre(collection[i], maxValeur)
-  '     couleur = calculerCouleurBarre(collection[i], i, etapeCourante)
-  '     x = i * largeurBarre
-  '     y = canvas.height - hauteur
-  '     gc.setFill(couleur)
-  '     gc.fillRect(x, y, largeurBarre - 2, hauteur)
-  '     gc.fillText(collection[i], x, canvas.height - 5)
-}
-
-class ControleurApplication {
-  - visualisateur: Visualisateur
-  - algorithmeActuel: TrieAlgorithme
-  - collectionOriginale: List<Integer>
-  - fenetreParametres: FenetreParametres
-  - fenetreVisualisation: FenetreVisualisation
-
-  + ControleurApplication()
-  + demarrer(): void
+  + GestionnaireTri()
   + setCollection(collection: List<Integer>): void
-  + selectionnerAlgorithme(type: String): void
-  + lancerTri(): void
-  + pauserAnimation(): void
-  + reprendreAnimation(): void
-  + arreterAnimation(): void
+  + setAlgorithme(type: TypeAlgorithme): void
+  + executerTri(): List<EtapeTri>
+  + getEtapes(): List<EtapeTri>
+  + notifierNouvelleEtape(etape: EtapeTri): void
+  + notifierFinTri(): void
+  - creerAlgorithme(type: TypeAlgorithme): AlgorithmeTri
+}
+
+enum TypeAlgorithme {
+  QUICK_SORT
+  MERGE_SORT
+}
+
+class AnimateurTri {
+  - etapes: List<EtapeTri>
+  - indexEtapeCourante: int
+  - timeline: Timeline
+  - vitesse: double
+  - enPause: boolean
+  - renderTri: RenderTri
+
+  + AnimateurTri(renderTri: RenderTri)
+  + setEtapes(etapes: List<EtapeTri>): void
+  + setVitesse(vitesse: double): void
+  + demarrer(): void
+  + pause(): void
+  + reprendre(): void
+  + arreter(): void
   + reinitialiser(): void
-  + afficherFenetreParametres(): void
-  + afficherFenetreVisualisation(): void
-  - creerAlgorithme(type: String): TrieAlgorithme
+  - afficherEtapeSuivante(): void
+  - creerTimeline(): void
 }
 
-class FenetreParametres {
-  - controleur: ControleurApplication
-  - comboAlgorithme: ComboBox<String>
-  - champCollection: TextField
-  - comboVitesse: ComboBox<String>
-  - boutonOK: Button
-  - boutonAnnuler: Button
-  - boutonAppliquer: Button
-
-  + FenetreParametres(controleur: ControleurApplication)
-  + afficher(): void
-  + validerSaisie(): boolean
-  - parseCo llection(texte: String): List<Integer>
-  - gererBoutonOK(): void
-  - gererBoutonAppliquer(): void
+interface RenderTri {
+  + dessiner(etape: EtapeTri): void
+  + effacer(): void
 }
 
-class FenetreVisualisation {
-  - controleur: ControleurApplication
+class RenderBarres {
   - canvas: Canvas
-  - boutonJouer: Button
-  - boutonPause: Button
-  - boutonArreter: Button
-  - labelEtape: Label
+  - gc: GraphicsContext
+  - couleurNormale: Color
+  - couleurComparaison: Color
+  - couleurPivot: Color
 
-  + FenetreVisualisation(controleur: ControleurApplication)
-  + afficher(): void
-  + mettreAJour(): void
-  - gererControlesAnimation(): void
+  + RenderBarres(canvas: Canvas)
+  + dessiner(etape: EtapeTri): void
+  + effacer(): void
+  - calculerDimensionsBarre(nbElements: int): double
+  - calculerHauteur(valeur: int, maxValeur: int): double
+  - determinerCouleur(index: int, indices: Map<String, Integer>): Color
+  - dessinerBarre(x: double, y: double, largeur: double, hauteur: double, couleur: Color): void
+  - dessinerValeur(valeur: int, x: double, y: double): void
 }
 
-' Relations
-TrieAlgorithme <|-- QuickSort
-TrieAlgorithme <|-- MergeSort
-TrieAlgorithme o-- EtapeTri : contient >
-TrieAlgorithme --> Visualisateur : utilise >
-Visualisateur <|.. VisualisateurGraphique
-ControleurApplication --> TrieAlgorithme : crée et utilise >
-ControleurApplication --> Visualisateur : utilise >
-ControleurApplication --> FenetreParametres : gère >
-ControleurApplication --> FenetreVisualisation : gère >
-FenetreParametres ..> ControleurApplication : notifie >
-FenetreVisualisation --> VisualisateurGraphique : contient >
-VisualisateurGraphique --> EtapeTri : affiche >
+class VueParametres {
+  - stage: Stage
+  - controleur: ControleurParametres
+  - comboAlgorithme: ComboBox<String>
+  - txtCollection: TextField
+  - comboVitesse: ComboBox<String>
 
-note left of TrieAlgorithme::trier
+  + VueParametres(stage: Stage, controleur: ControleurParametres)
+  + afficher(): void
+  + fermer(): void
+  + getAlgorithmeSelectionne(): String
+  + getCollection(): String
+  + getVitesse(): String
+  + afficherErreur(message: String): void
+  - initialiserComposants(): void
+  - creerLayout(): Parent
+}
+
+class ControleurParametres {
+  - gestionnaire: GestionnaireTri
+  - vueParametres: VueParametres
+  - controleurVisualisation: ControleurVisualisation
+
+  + ControleurParametres(gestionnaire: GestionnaireTri)
+  + setControleurVisualisation(controleur: ControleurVisualisation): void
+  + afficherVue(): void
+  + validerEtLancerTri(): void
+  + annuler(): void
+  - validerCollection(texte: String): boolean
+  - parseCollection(texte: String): List<Integer>
+  - convertirVitesse(vitesse: String): double
+}
+
+class VueVisualisation {
+  - stage: Stage
+  - controleur: ControleurVisualisation
+  - canvas: Canvas
+  - btnJouer: Button
+  - btnPause: Button
+  - btnArreter: Button
+  - lblEtape: Label
+
+  + VueVisualisation(stage: Stage, controleur: ControleurVisualisation)
+  + afficher(): void
+  + getCanvas(): Canvas
+  + mettreAJourEtape(description: String): void
+  + activerBoutonJouer(actif: boolean): void
+  + activerBoutonPause(actif: boolean): void
+  - initialiserComposants(): void
+  - creerLayout(): Parent
+}
+
+class ControleurVisualisation {
+  - gestionnaire: GestionnaireTri
+  - animateur: AnimateurTri
+  - vueVisualisation: VueVisualisation
+  - render: RenderTri
+
+  + ControleurVisualisation(gestionnaire: GestionnaireTri)
+  + initialiser(): void
+  + demarrerAnimation(etapes: List<EtapeTri>, vitesse: double): void
+  + jouer(): void
+  + pause(): void
+  + arreter(): void
+  + reinitialiser(): void
+  - creerRender(canvas: Canvas): RenderTri
+}
+
+class ApplicationPrincipale {
+  - gestionnaire: GestionnaireTri
+  - controleurParametres: ControleurParametres
+  - controleurVisualisation: ControleurVisualisation
+
+  + start(primaryStage: Stage): void
+  + main(args: String[]): void
+  - initialiserControleurs(): void
+}
+
+' Relations - Patron Template
+AlgorithmeTri <|-- QuickSort
+AlgorithmeTri <|-- MergeSort
+AlgorithmeTri ..> EtapeTri : crée >
+AlgorithmeTri --> ObservateurTri : notifie >
+
+' Relations - Gestion du tri
+GestionnaireTri ..|> ObservateurTri
+GestionnaireTri --> AlgorithmeTri : utilise >
+GestionnaireTri --> TypeAlgorithme : utilise >
+GestionnaireTri o-- EtapeTri : stocke >
+
+' Relations - Animation
+AnimateurTri --> RenderTri : utilise >
+AnimateurTri o-- EtapeTri : anime >
+RenderTri <|.. RenderBarres
+
+' Relations - MVC Paramètres
+ControleurParametres --> VueParametres : gère >
+ControleurParametres --> GestionnaireTri : utilise >
+VueParametres ..> ControleurParametres : notifie >
+
+' Relations - MVC Visualisation
+ControleurVisualisation --> VueVisualisation : gère >
+ControleurVisualisation --> AnimateurTri : contrôle >
+ControleurVisualisation --> GestionnaireTri : utilise >
+ControleurVisualisation --> RenderBarres : crée >
+VueVisualisation ..> ControleurVisualisation : notifie >
+VueVisualisation *-- Canvas
+
+' Relations - Application
+ApplicationPrincipale --> GestionnaireTri : crée >
+ApplicationPrincipale --> ControleurParametres : crée >
+ApplicationPrincipale --> ControleurVisualisation : crée >
+ControleurParametres --> ControleurVisualisation : collabore >
+
+note left of AlgorithmeTri::executer
   **MÉTHODE TEMPLATE**
-  Définit le squelette de l'algorithme
+  Définit le squelette de l'algorithme.
   Les sous-classes implémentent
-  les étapes spécifiques
+  trierRecursif() avec leur logique
+  spécifique.
 end note
 
-note bottom of QuickSort
-  Implémente le tri rapide avec
-  partitionnement autour d'un pivot
+note bottom of GestionnaireTri
+  Implémente ObservateurTri pour
+  collecter toutes les étapes du tri.
+  Coordonne l'exécution des algorithmes.
 end note
 
-note bottom of MergeSort
-  Implémente le tri fusion avec
-  division équitable et fusion triée
+note bottom of AnimateurTri
+  Utilise Timeline de JavaFX pour
+  animer les étapes de façon fluide.
+  Gère play/pause/stop.
 end note
 
-note right of EtapeTri
-  Capture l'état de la collection
-  à chaque étape avec métadonnées
-  pour la visualisation colorée
-end note
-
-note bottom of VisualisateurGraphique
-  Dessine des barres colorées
-  représentant les valeurs.
-  Les couleurs changent selon
-  l'état (comparaison, modification, trié)
+note right of RenderBarres
+  Utilise Canvas et GraphicsContext
+  de JavaFX pour dessiner les barres.
+  Applique des couleurs selon les indices.
 end note
 
 @enduml
