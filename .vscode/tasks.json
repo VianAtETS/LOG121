@@ -4,7 +4,7 @@
         {
             "label": "Delete old Git branches",
             "type": "shell",
-            "command": "git fetch --prune && git fetch -p ; git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -D",
+            "command": "git fetch --prune && git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs -r git branch -D",
             "problemMatcher": [],
             "presentation": {
                 "showReuseMessage": false
