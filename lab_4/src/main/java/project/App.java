@@ -1,38 +1,56 @@
 package project;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 /**
- * JavaFX App
+ * Application principale pour la visualisation des algorithmes de tri. Implémente le patron
+ * Template Method pour les algorithmes Quick Sort et Merge Sort. Permet la visualisation animée des
+ * étapes intermédiaires du tri.
  */
 public class App extends Application {
+    private GestionnaireTri gestionnaire;
+    private ControleurParametres controleurParametres;
+    private ControleurVisualisation controleurVisualisation;
 
-    private static Scene scene;
-
+    /**
+     * Point d'entrée de l'application JavaFX.
+     * 
+     * @param primaryStage Le stage principal
+     */
     @Override
-    public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage primaryStage) {
+        initialiserControleurs(primaryStage);
+        controleurParametres.afficherVue();
     }
 
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+    /**
+     * Initialise les contrôleurs et leurs dépendances.
+     * 
+     * @param primaryStage Le stage principal
+     */
+    private void initialiserControleurs(Stage primaryStage) {
+        // Créer le gestionnaire de tri
+        gestionnaire = new GestionnaireTri();
+
+        // Créer le contrôleur de visualisation
+        Stage stageVisualisation = new Stage();
+        controleurVisualisation = new ControleurVisualisation(gestionnaire, stageVisualisation);
+        controleurVisualisation.initialiser();
+
+        // Créer le contrôleur des paramètres
+        controleurParametres = new ControleurParametres(gestionnaire);
+        VueParametres vueParametres = new VueParametres(primaryStage, controleurParametres);
+        controleurParametres.setVue(vueParametres);
+        controleurParametres.setControleurVisualisation(controleurVisualisation);
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
-    }
-
+    /**
+     * Point d'entrée principal de l'application.
+     * 
+     * @param args Arguments de la ligne de commande
+     */
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
-
 }
