@@ -17,7 +17,7 @@ public class ControleurVisualisation {
 
     /**
      * Constructeur du contrôleur de visualisation.
-     * 
+     *
      * @param gestionnaire Le gestionnaire de tri
      * @param stage Le stage JavaFX
      */
@@ -34,7 +34,7 @@ public class ControleurVisualisation {
         Canvas canvas = vueVisualisation.getCanvas();
         render = creerRender(canvas);
         animateur = new AnimateurTri(render);
-        
+
         // Configurer le callback pour mettre à jour l'affichage de l'étape
         animateur.setCallbackEtape(etape -> {
             if (etape != null) {
@@ -45,7 +45,7 @@ public class ControleurVisualisation {
 
     /**
      * Démarre l'animation avec les étapes fournies.
-     * 
+     *
      * @param etapes Les étapes du tri
      * @param vitesse La vitesse d'animation
      */
@@ -123,7 +123,7 @@ public class ControleurVisualisation {
 
     /**
      * Crée le moteur de rendu.
-     * 
+     *
      * @param canvas Le canvas sur lequel dessiner
      * @return Le moteur de rendu
      */

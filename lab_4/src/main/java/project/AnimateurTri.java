@@ -24,7 +24,7 @@ public class AnimateurTri {
 
     /**
      * Constructeur de l'animateur.
-     * 
+     *
      * @param renderTri Le moteur de rendu pour afficher les étapes
      */
     public AnimateurTri(RenderTri renderTri) {
@@ -37,7 +37,7 @@ public class AnimateurTri {
 
     /**
      * Définit un callback appelé à chaque nouvelle étape.
-     * 
+     *
      * @param callback Le callback à appeler
      */
     public void setCallbackEtape(Consumer<EtapeTri> callback) {
@@ -46,7 +46,7 @@ public class AnimateurTri {
 
     /**
      * Définit les étapes à animer.
-     * 
+     *
      * @param etapes La liste des étapes du tri
      */
     public void setEtapes(List<EtapeTri> etapes) {
@@ -56,7 +56,7 @@ public class AnimateurTri {
 
     /**
      * Définit la vitesse d'animation.
-     * 
+     *
      * @param vitesse La durée en secondes entre chaque étape
      */
     public void setVitesse(double vitesse) {
@@ -134,12 +134,12 @@ public class AnimateurTri {
         if (indexEtapeCourante < etapes.size()) {
             EtapeTri etape = etapes.get(indexEtapeCourante);
             renderTri.dessiner(etape);
-            
+
             // Notifier le callback si défini
             if (callbackEtape != null) {
                 callbackEtape.accept(etape);
             }
-            
+
             indexEtapeCourante++;
 
             // Arrêter l'animation si on a atteint la fin
@@ -160,7 +160,7 @@ public class AnimateurTri {
 
     /**
      * Vérifie si l'animation est en cours.
-     * 
+     *
      * @return true si l'animation est en cours, false sinon
      */
     public boolean estEnCours() {
@@ -169,7 +169,7 @@ public class AnimateurTri {
 
     /**
      * Vérifie si l'animation est en pause.
-     * 
+     *
      * @return true si l'animation est en pause, false sinon
      */
     public boolean estEnPause() {
@@ -178,7 +178,7 @@ public class AnimateurTri {
 
     /**
      * Retourne l'étape courante.
-     * 
+     *
      * @return L'étape courante ou null si aucune étape
      */
     public EtapeTri getEtapeCourante() {

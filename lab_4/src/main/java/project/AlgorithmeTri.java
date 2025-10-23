@@ -37,10 +37,10 @@ public abstract class AlgorithmeTri {
     public void executer() {
         // Notifier l'état initial
         notifierEtape("État initial", null);
-        
+
         // Trier la collection en place
         trierRecursif(collection, 0, collection.size() - 1);
-        
+
         // Notifier la fin du tri
         notifierEtape("Tri terminé", null);
         if (observateur != null) {
